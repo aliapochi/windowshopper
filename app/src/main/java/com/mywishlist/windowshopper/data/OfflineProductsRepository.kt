@@ -10,4 +10,6 @@ class OfflineProductsRepository(private val productDao: ProductDao): ProductsRep
 
     override suspend fun insertProduct(product: Product) = productDao.insertProduct(product)
 
+    override suspend fun updateProduct(product: Product) = productDao.updateProduct(product)
+
 }

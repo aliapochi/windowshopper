@@ -22,7 +22,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    WindowShopperApp {
+
+                    }
                 }
             }
         }
@@ -30,17 +32,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun WindowShopperApp(content: @Composable () -> Unit){
+    MaterialTheme{
+        content()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     WindowShopperTheme {
-        Greeting("Android")
+        WindowShopperApp {
+
+        }
     }
 }

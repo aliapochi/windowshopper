@@ -6,15 +6,20 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mywishlist.windowshopper.data.OfflineProductsRepository
+import com.mywishlist.windowshopper.data.ProductDatabase
+import com.mywishlist.windowshopper.ui.theme.ProductScreen
 import com.mywishlist.windowshopper.ui.theme.WindowShopperTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Initialize Database
+        val database = ProductDatabase.getDatabase(this)
+        val productRepository = OfflineProductsRepository(database.productDao())
         setContent {
             WindowShopperTheme {
                 // A surface container using the 'background' color from the theme
@@ -23,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     WindowShopperApp {
-
+                        ProductScreen(repository = productRepository)
                     }
                 }
             }
@@ -40,10 +45,6 @@ fun WindowShopperApp(content: @Composable () -> Unit){
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    WindowShopperTheme {
-        WindowShopperApp {
+fun WindowShopperPreview() {
 
-        }
-    }
 }

@@ -18,7 +18,8 @@ abstract class ProductDatabase: RoomDatabase() {
                 Room.databaseBuilder(context, ProductDatabase::class.java,
                     "product_database")
                     .build()
-                    .also{ Instance = it }
+                    .also{ Instance = it
+                        Log.d("ProductDatabase", "Database initialized")}
             }
 
         }

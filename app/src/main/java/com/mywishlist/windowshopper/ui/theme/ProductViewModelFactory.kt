@@ -18,11 +18,6 @@ class ProductViewModelFactory(private val repository: ProductsRepository) : View
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         return create(modelClass)
     }
-    // In your Activity or Fragment
-//    val productDao = ProductDatabase.getDatabase(application).productDao()
-//    val repository = OfflineProductsRepository(productDao)
-//    val factory = ProductViewModelFactory(repository)
-//    val viewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
 }
 
 

@@ -31,8 +31,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     WindowShopperApp {
-                        //ProductScreen(repository = productRepository)
-                        TestMyAppDisplay(modifier = Modifier.fillMaxWidth())
+                        ProductScreen(repository = productRepository)
+
                     }
                 }
             }
@@ -40,14 +40,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun TestMyAppDisplay(modifier: Modifier){
-    Column(modifier = Modifier.fillMaxWidth()
-        ){
-        Text("Just Testing")
 
-    }
-}
 
 @Composable
 fun WindowShopperApp(content: @Composable () -> Unit){

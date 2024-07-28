@@ -12,4 +12,13 @@ class OfflineProductsRepository(private val productDao: ProductDao): ProductsRep
 
     override suspend fun updateProduct(product: Product) = productDao.updateProduct(product)
 
+    override suspend fun insertDefaultData() {
+        val defaultProducts = listOf(
+            Product(1, name = "Sample Product 1", image = "url_to_image_1", description = "Sample description 1", liked = false, isDefault = true),
+            Product(2, name = "Sample Product 2", image = "url_to_image_2", description = "Sample description 2", liked = false, isDefault = true)
+            // Add more default products here
+        )
+        productDao.insertAllProducts(defaultProducts)
+    }
+
 }

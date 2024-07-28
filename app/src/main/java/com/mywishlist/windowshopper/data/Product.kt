@@ -9,5 +9,6 @@ data class Product(
     val name: String,
     val image: String,
     val description: String,
-    val liked: Boolean
+    val liked: Boolean,
+    val isDefault: Boolean = false
     )

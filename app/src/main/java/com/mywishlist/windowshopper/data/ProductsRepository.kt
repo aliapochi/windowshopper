@@ -13,6 +13,9 @@ interface ProductsRepository {
     //Insert a Product into Database
     suspend fun insertProduct(product:Product)
 
+    // Insert Default Products into Database
+    suspend fun insertDefaultData()
+
     //Update a product
     suspend fun updateProduct(product: Product)
 }

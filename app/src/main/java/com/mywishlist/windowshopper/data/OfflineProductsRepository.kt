@@ -1,5 +1,6 @@
 package com.mywishlist.windowshopper.data
 
+import com.mywishlist.windowshopper.R
 import kotlinx.coroutines.flow.Flow
 
 class OfflineProductsRepository(private val productDao: ProductDao): ProductsRepository {
@@ -14,8 +15,8 @@ class OfflineProductsRepository(private val productDao: ProductDao): ProductsRep
 
     override suspend fun insertDefaultData() {
         val defaultProducts = listOf(
-            Product(1, name = "Sample Product 1", image = "url_to_image_1", description = "Sample description 1", liked = false, isDefault = true),
-            Product(2, name = "Sample Product 2", image = "url_to_image_2", description = "Sample description 2", liked = false, isDefault = true)
+            Product(1, name = "Sample Product 1", "ic_launcher_background", description = "Sample description 1", liked = false, isDefault = true),
+            Product(2, name = "Sample Product 2", "ic_launcher_background", description = "Sample description 2", liked = false, isDefault = true)
             // Add more default products here
         )
         productDao.insertAllProducts(defaultProducts)

@@ -7,25 +7,46 @@ import com.mywishlist.windowshopper.data.ProductsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
-class ProductViewModel(private val repository: ProductsRepository): ViewModel() {
+class ProductViewModel(private val repository: ProductsRepository) : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> get() = _products
-    
+
     init {
         viewModelScope.launch {
-            repository.getAllProductsStream().collect{
-                _products.value = it
+            initializeData()
+            repository.getAllProductsStream().collect { productList ->
+                _products.value = productList
             }
         }
     }
-     fun likeProduct(product: Product){
-         viewModelScope.launch {
-             repository.updateProduct(product.copy(liked = true))
-         }
-     } fun dislikeProduct(product: Product){
-         viewModelScope.launch {
-             repository.updateProduct(product.copy(liked = false))
-         }
-     }
+
+    private suspend fun initializeData() {
+        // Check if the data already exists and only insert default data if necessary
+        val existingProducts = repository.getAllProductsStream().first()
+        if (existingProducts.isEmpty()) {
+            repository.insertDefaultData()
+        }
+    }
+
+    fun likeProduct(product: Product) {
+        viewModelScope.launch {
+            try {
+                repository.updateProduct(product.copy(liked = true))
+            } catch (e: Exception) {
+                // Handle error (e.g., log the error or show a message to the user)
+            }
+        }
+    }
+
+    fun dislikeProduct(product: Product) {
+        viewModelScope.launch {
+            try {
+                repository.updateProduct(product.copy(liked = false))
+            } catch (e: Exception) {
+                // Handle error (e.g., log the error or show a message to the user)
+            }
+        }
+    }
 }

@@ -18,9 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import com.mywishlist.windowshopper.R
 import com.mywishlist.windowshopper.data.Product
 import com.mywishlist.windowshopper.data.ProductsRepository
 
@@ -49,6 +52,15 @@ fun ProductScreen(repository: ProductsRepository){
 
 @Composable
 fun ProductItem(product: Product, onLike:() -> Unit, onDislike: () -> Unit) {
+    val context = LocalContext.current
+    val imageId = context.resources.getIdentifier(product.image, "drawable", context.packageName)
+
+    val actualImageId = if (imageId != 0) {
+        imageId
+    } else {
+        R.drawable.ic_grain // Use a default image if the resource ID is not found
+    }
+
     Box(
         modifier = Modifier.
             fillMaxWidth().
@@ -59,7 +71,7 @@ fun ProductItem(product: Product, onLike:() -> Unit, onDislike: () -> Unit) {
         Column {
             Text(product.name)
             Text(product.description)
-            Image(painter = rememberAsyncImagePainter(product.image), contentDescription = null,
+            Image(painter = painterResource(actualImageId), contentDescription = null,
                 modifier = Modifier.size(128.dp))
             Row {
                 Button(onClick = onLike){

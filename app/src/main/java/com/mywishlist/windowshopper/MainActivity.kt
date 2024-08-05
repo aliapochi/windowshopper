@@ -12,8 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.mywishlist.windowshopper.data.OfflineProductsRepository
-import com.mywishlist.windowshopper.data.ProductDatabase
 import com.mywishlist.windowshopper.ui.theme.ProductScreen
 import com.mywishlist.windowshopper.ui.theme.WindowShopperTheme
 

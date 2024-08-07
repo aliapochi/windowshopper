@@ -7,15 +7,15 @@ class DataSource() {
     fun loadProducts(): List<Product>{
         return listOf(
             Product(
-                name = "Wireless Headphones",
-                image = R.drawable.wireless_headphones,  // Image: wireless_headphones.png
-                description = "Noise-cancelling wireless headphones with 20 hours of battery life.",
-                liked = false
-            ),
-            Product(
                 name = "Gaming Laptop",
                 image = R.drawable.gaming_laptop,  // Image: gaming_laptop.png
                 description = "High-performance gaming laptop with RTX graphics and 16GB RAM.",
+                liked = false
+            ),
+            Product(
+                name = "Wireless Headphones",
+                image = R.drawable.wireless_headphones,  // Image: wireless_headphones.png
+                description = "Noise-cancelling wireless headphones with 20 hours of battery life.",
                 liked = false
             ),
             Product(

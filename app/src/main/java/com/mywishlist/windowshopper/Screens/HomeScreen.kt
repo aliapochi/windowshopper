@@ -18,9 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -41,7 +44,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    val products = DataSource().loadProducts()
+    var products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
     val coroutineScope = rememberCoroutineScope()
     val wishList = remember { mutableStateListOf<Product>() }
 
@@ -97,12 +100,14 @@ fun HomeScreen(navController: NavController) {
                         // Add product to wishlist on right swipe
                         coroutineScope.launch {
                             wishList.add(product)
+                            products = products.toMutableList().apply { remove(product) }
                         }
                     },
                     onSwipeLeft = {
                         // Handle left swipe (e.g., dislike)
-                        // Implement your desired action here
-                        println("Swiped Left: ${product.name}")
+                        coroutineScope.launch {
+                            products = products.toMutableList().apply { remove(product) }
+                        }
                     },
                     swipeThreshold = swipeThreshold
                 )

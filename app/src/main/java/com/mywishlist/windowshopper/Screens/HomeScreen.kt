@@ -58,7 +58,6 @@ fun HomeScreen(navController: NavController) {
         ) {
             items(products.size) { index ->
                 val product = products[index]
-                val swipeThreshold = 200.dp // Adjust as needed
 
                 SwipeCard(
                     modifier = Modifier
@@ -109,7 +108,6 @@ fun HomeScreen(navController: NavController) {
                             products = products.toMutableList().apply { remove(product) }
                         }
                     },
-                    swipeThreshold = swipeThreshold
                 )
             }
         }
@@ -121,14 +119,14 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun SwipeCard(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
     onSwipeLeft: () -> Unit = {},
     onSwipeRight: () -> Unit = {},
-    swipeThreshold: Dp = 200.dp
+    swipeThreshold: Dp = 200.dp,
+    content: @Composable () -> Unit
 ) {
     val swipeState = rememberSwipeableState(0)
     val scope = rememberCoroutineScope()
-    val swipeThresholdPx = with(LocalDensity.current) { swipeThreshold.toPx() }
+    val swipeThresholdPx = with(LocalDensity.current){ swipeThreshold.toPx()}
 
     Box(
         modifier = modifier
@@ -143,13 +141,14 @@ fun SwipeCard(
         content()
 
         LaunchedEffect(swipeState.currentValue) {
-            if (swipeState.currentValue == 1) {
+            if (swipeState.currentValue == 1){
                 onSwipeRight()
                 scope.launch { swipeState.snapTo(0) }
-            } else if (swipeState.currentValue == -1) {
+            }else if (swipeState.currentValue == -1){
                 onSwipeLeft()
                 scope.launch { swipeState.snapTo(0) }
             }
+
         }
     }
 }

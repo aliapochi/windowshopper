@@ -1,21 +1,17 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mywishlist.windowshopper.Screens.HomeScreen
-import com.mywishlist.windowshopper.Screens.SettingsScreen
-import com.mywishlist.windowshopper.Screens.WishlistScreen
+import com.mywishlist.windowshopper.HomeScreen
+import com.mywishlist.windowshopper.SettingsScreen
+import com.mywishlist.windowshopper.WishlistScreen
+import com.mywishlist.windowshopper.model.Product
 
 
-@Composable
-fun AppNavGraph(){
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home"){
-        composable("home"){ HomeScreen(navController) }
-        composable("wishlist"){ WishlistScreen(navController) }
-        composable("settings"){ SettingsScreen(navController) }
-    }
-}
+
 
 
 

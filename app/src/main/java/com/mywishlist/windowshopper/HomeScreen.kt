@@ -1,4 +1,4 @@
-package com.mywishlist.windowshopper.Screens
+package com.mywishlist.windowshopper
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,10 +42,10 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
+    var wishList = mutableListOf<Product>()
     var products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
     val coroutineScope = rememberCoroutineScope()
-    val wishList = remember { mutableStateListOf<Product>() }
 
     Scaffold(
         topBar = {

@@ -42,8 +42,8 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-    var wishList = mutableListOf<Product>()
+fun HomeScreen(navController: NavController, wishList: MutableList<Product>) {
+    //var wishList = mutableListOf<Product>()
     var products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
     val coroutineScope = rememberCoroutineScope()
 

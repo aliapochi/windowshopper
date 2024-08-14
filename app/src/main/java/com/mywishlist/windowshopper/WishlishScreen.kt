@@ -20,16 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.mywishlist.windowshopper.model.Product
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WishlistScreen() {
-    val wishList = remember {
-        mutableListOf<Product>()
-    }
+fun WishlistScreen(navController: NavController, wishList: List<Product>) {
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Wishlist") })

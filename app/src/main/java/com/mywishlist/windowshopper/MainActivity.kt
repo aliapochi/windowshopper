@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavGraph(){
     val navController = rememberNavController()
+    val wishList = remember { mutableStateListOf<Product>() }
     val context = LocalContext.current.applicationContext
     val selected = remember {
         mutableStateOf(Icons.Default.Home)
@@ -111,8 +112,8 @@ fun AppNavGraph(){
         NavHost(navController = navController,
             startDestination = Screens.HomeScreen.screen,
             modifier = Modifier.padding(paddingValues)){
-            composable(Screens.HomeScreen.screen){ HomeScreen()}
-            composable(Screens.WishlistScreen.screen){ WishlistScreen()}
+            composable(Screens.HomeScreen.screen){ HomeScreen(navController = navController, wishList = wishList)}
+            composable(Screens.WishlistScreen.screen){ WishlistScreen(navController = navController, wishList = wishList)}
             composable(Screens.SettingsScreen.screen){ SettingsScreen()}
 
         }

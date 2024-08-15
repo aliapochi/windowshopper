@@ -43,8 +43,8 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, wishList: MutableList<Product>) {
-    //var wishList = mutableListOf<Product>()
     var products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
+    var currentIndex by remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -55,63 +55,74 @@ fun HomeScreen(navController: NavController, wishList: MutableList<Product>) {
         LazyRow(
             modifier = Modifier.padding(innerPadding)
         ) {
-            items(products.size) { index ->
-                val product = products[index]
-
-                SwipeCard(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxSize(),
-                    content = {
-                        Column(
-
-                        ) {
-                            // Display the product image
-                            Image(
-                                painter = painterResource(id = product.image),
-                                contentDescription = product.name,
-                                modifier = Modifier
-                                    .size(128.dp)
-                                    .align(Alignment.CenterHorizontally)
-                            )
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            // Display the product name
-                            Text(
-                                text = product.name,
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            // Display the product description
-                            Text(
-                                text = product.description,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
+            items(1) { // Display one item at a time
+                if (products.isNotEmpty()) {
+                    val product = products[currentIndex]
+                    // Function to move to the next product
+                    fun moveToNextProduct() {
+                        if (currentIndex < products.size - 1) {
+                            currentIndex++
+                        } else {
+                            currentIndex = 0 // Optionally loop back to the first product
                         }
-                    },
-                    onSwipeRight = {
-                        // Add product to wishlist on right swipe
-                        coroutineScope.launch {
-                            wishList.add(product)
-                            products = products.toMutableList().apply { remove(product) }
-                        }
-                    },
-                    onSwipeLeft = {
-                        // Handle left swipe (e.g., dislike)
-                        coroutineScope.launch {
-                            products = products.toMutableList().apply { remove(product) }
-                        }
-                    },
-                )
+                    }
+
+                    SwipeCard(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxSize(),
+                        content = {
+                            Column {
+                                // Display the product image
+                                Image(
+                                    painter = painterResource(id = product.image),
+                                    contentDescription = product.name,
+                                    modifier = Modifier
+                                        .size(128.dp)
+                                        .align(Alignment.CenterHorizontally)
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                // Display the product name
+                                Text(
+                                    text = product.name,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                // Display the product description
+                                Text(
+                                    text = product.description,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+                            }
+                        },
+                        onSwipeRight = {
+                            coroutineScope.launch {
+                                if (!wishList.contains(product)) {
+                                    wishList.add(product)
+                                }
+                                moveToNextProduct()
+                            }
+                        },
+                        onSwipeLeft = {
+                            coroutineScope.launch {
+                                moveToNextProduct()
+                            }
+                        },
+                    )
+                }
             }
         }
     }
+
+
 }
+
 
 
 @OptIn(ExperimentalWearMaterialApi::class)

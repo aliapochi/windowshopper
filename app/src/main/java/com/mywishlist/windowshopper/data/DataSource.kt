@@ -41,6 +41,24 @@ class DataSource() {
                 image = R.drawable.fitness_tracker,  // Image: fitness_tracker.png
                 description = "Fitness tracker with activity tracking, sleep monitoring, and water resistance.",
                 liked = false
+            ),
+            Product(
+                name = "Classic Leather Men's Watch",
+                image = R.drawable.mens_watch,  // Replace with actual drawable ID
+                description = "Elegant and timeless leather strap watch for men. Water-resistant with a stainless steel case.",
+                liked = true
+            ),
+            Product(
+                name = "Vintage Leather Handbag",
+                image = R.drawable.vintage_handbag,  // Replace with actual drawable ID
+                description = "Stylish and spacious vintage handbag made from genuine leather. Perfect for everyday use.",
+                liked = false
+            ),
+            Product(
+                name = "Designer Tote Bag",
+                image = R.drawable.designer_tote_bag,  // Replace with actual drawable ID
+                description = "Luxurious designer tote bag with ample space for all your essentials. Ideal for both casual and formal outings.",
+                liked = true
             )
         )
     }

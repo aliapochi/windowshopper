@@ -1,11 +1,17 @@
 package com.mywishlist.windowshopper
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -19,12 +25,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
@@ -43,8 +53,8 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, wishList: MutableList<Product>) {
-    var products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
-    var currentIndex by remember { mutableStateOf(0) }
+    val products by remember { mutableStateOf(DataSource().loadProducts().toMutableList()) }
+    var currentIndex by remember { mutableIntStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -72,33 +82,51 @@ fun HomeScreen(navController: NavController, wishList: MutableList<Product>) {
                             .padding(8.dp)
                             .fillMaxSize(),
                         content = {
-                            Column {
+                            Column (modifier = Modifier.fillMaxSize()) {
                                 // Display the product image
                                 Image(
                                     painter = painterResource(id = product.image),
                                     contentDescription = product.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                                // Overlay with a gradient for better readability
+                                Box(
                                     modifier = Modifier
-                                        .size(128.dp)
-                                        .align(Alignment.CenterHorizontally)
+                                        .fillMaxSize()
+                                        .background(
+                                            Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.Transparent,
+                                                    Color.Black.copy(alpha = 0.7f)
+                                                )
+                                            )
+                                        )
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 // Display the product name
-                                Text(
-                                    text = product.name,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
+                                // Text content at the bottom
+                                Column(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(16.dp)
+                                ) {
+                                    Text(
+                                        text = product.name,
+                                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
 
-                                Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                // Display the product description
-                                Text(
-                                    text = product.description,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
+                                    Text(
+                                        text = product.description,
+                                        style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
                             }
                         },
                         onSwipeRight = {
@@ -138,6 +166,15 @@ fun SwipeCard(
     val scope = rememberCoroutineScope()
     val swipeThresholdPx = with(LocalDensity.current){ swipeThreshold.toPx()}
 
+    // Animation for offset
+    val animatedOffset by animateIntOffsetAsState(
+        targetValue = IntOffset(swipeState.offset.value.roundToInt(), 0),
+        animationSpec = tween(
+            durationMillis = 300, // Adjust this for smoother/faster animations
+            easing = LinearOutSlowInEasing
+        ), label = ""
+    )
+
     Box(
         modifier = modifier
             .swipeable(
@@ -146,7 +183,7 @@ fun SwipeCard(
                 thresholds = { _, _ -> FractionalThreshold(0.3f) },
                 orientation = Orientation.Horizontal
             )
-            .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
+            .offset { animatedOffset }
     ) {
         content()
 

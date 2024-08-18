@@ -82,7 +82,7 @@ fun AppNavGraph(){
                 IconButton(
                     onClick = {
                         selected.value = Icons.Default.Favorite
-                        navController.navigate(Screens.WishlistScreen.screen){
+                        navController.navigate(Screens.WishlistScreenWithShare.screen){
                             popUpTo(0)
                         }
                     },
@@ -113,7 +113,7 @@ fun AppNavGraph(){
             startDestination = Screens.HomeScreen.screen,
             modifier = Modifier.padding(paddingValues)){
             composable(Screens.HomeScreen.screen){ HomeScreen(navController = navController, wishList = wishList)}
-            composable(Screens.WishlistScreen.screen){ WishlistScreen(navController = navController, wishList = wishList)}
+            composable(Screens.WishlistScreenWithShare.screen){ WishlistScreenWithShare(navController = navController, wishList = wishList)}
             composable(Screens.SettingsScreen.screen){ SettingsScreen()}
 
         }

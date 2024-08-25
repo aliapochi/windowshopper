@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,14 +17,21 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen() {
+    val notificationsEnabled = remember { mutableStateOf(true) }
+    val notificationFrequency = remember { mutableStateOf("Daily") }
+    val showFrequencyDialog = remember { mutableStateOf(false) }
+    val notificationTypes = remember { mutableStateOf("All Notifications") }
+    val showTypesDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Settings") })
@@ -34,49 +42,81 @@ fun SettingsScreen() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // Account Management Section
-            Text("Account Management", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
-            Divider()
-            ListItem(text = "Profile Information", onClick = { /* Navigate to Profile Screen */ })
-            ListItem(text = "Log Out", onClick = { /* Handle Logout */ })
-
             // Notification Settings Section
             Spacer(modifier = Modifier.height(16.dp))
             Text("Notification Settings", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
             Divider()
-            ListItem(text = "Enable Notifications", trailing = { Switch(checked = true, onCheckedChange = {}) }, onClick = {})
-            ListItem(text = "Notification Frequency", onClick = { /* Show Frequency Options */ })
-            ListItem(text = "Notification Types", onClick = { /* Show Notification Types Options */ })
 
-            // Wishlist Preferences Section
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Wishlist Preferences", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
-            Divider()
-            ListItem(text = "Auto-Remove Liked Items", trailing = { Switch(checked = true, onCheckedChange = {}) },onClick = {})
-            ListItem(text = "Sort Wishlist", onClick = { /* Show Sorting Options */ })
+            // Enable Notifications
+            ListItem(
+                text = "Enable Notifications",
+                trailing = {
+                    Switch(checked = notificationsEnabled.value, onCheckedChange = {
+                        notificationsEnabled.value = it
+                    })
+                },
+                onClick = { notificationsEnabled.value = !notificationsEnabled.value }
+            )
 
-            // Appearance Section
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Appearance", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
-            Divider()
-            ListItem(text = "Theme", onClick = { /* Show Theme Selection */ })
-            ListItem(text = "Font Size", onClick = { /* Show Font Size Options */ })
+            // Notification Frequency
+            ListItem(
+                text = "Notification Frequency: ${notificationFrequency.value}",
+                onClick = { showFrequencyDialog.value = true }
+            )
 
-            // Data Management Section
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Data Management", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
-            Divider()
-            ListItem(text = "Clear Wishlist", onClick = { /* Clear Wishlist */ })
-            ListItem(text = "Export Data", onClick = { /* Export Wishlist */ })
-            ListItem(text = "Import Data", onClick = { /* Import Wishlist */ })
+            // Notification Types
+            ListItem(
+                text = "Notification Types: ${notificationTypes.value}",
+                onClick = { showTypesDialog.value = true }
+            )
 
-            // Support Section
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Support", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(8.dp))
-            Divider()
-            ListItem(text = "Contact Us", onClick = { /* Open Email */ })
-            ListItem(text = "FAQ", onClick = { /* Show FAQ */ })
-            ListItem(text = "App Version: 1.0.0", onClick = { /* Do Nothing */ })
+            // Dialog for selecting notification frequency
+            if (showFrequencyDialog.value) {
+                AlertDialog(
+                    onDismissRequest = { showFrequencyDialog.value = false },
+                    title = { Text("Select Notification Frequency") },
+                    text = {
+                        Column {
+                            listOf("Daily", "Weekly", "Monthly").forEach { frequency ->
+                                Text(
+                                    text = frequency,
+                                    modifier = Modifier
+                                        .clickable {
+                                            notificationFrequency.value = frequency
+                                            showFrequencyDialog.value = false
+                                        }
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    },
+                    confirmButton = {}
+                )
+            }
+
+            // Dialog for selecting notification types
+            if (showTypesDialog.value) {
+                AlertDialog(
+                    onDismissRequest = { showTypesDialog.value = false },
+                    title = { Text("Select Notification Types") },
+                    text = {
+                        Column {
+                            listOf("All Notifications", "Only Important").forEach { type ->
+                                Text(
+                                    text = type,
+                                    modifier = Modifier
+                                        .clickable {
+                                            notificationTypes.value = type
+                                            showTypesDialog.value = false
+                                        }
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    },
+                    confirmButton = {}
+                )
+            }
         }
     }
 }

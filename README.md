@@ -28,7 +28,7 @@ Window Shopper is a shopping wishlist app where users can browse products, swipe
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/window-shopper-app.git
+   git clone https://github.com/aliapochi/windowshopper.git
    ```
 
 2. Open the project in Android Studio.
